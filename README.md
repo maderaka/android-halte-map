@@ -1,3 +1,3 @@
 # android-halte-map
 
-Simple Halte Map application which use data from data.go.id
+Android Halte Map is a simple android app to show halte in Jakarta which use open data from data.go.id
