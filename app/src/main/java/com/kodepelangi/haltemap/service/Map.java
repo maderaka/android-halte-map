@@ -5,11 +5,14 @@ import android.app.Activity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.kodepelangi.haltemap.R;
@@ -62,16 +65,24 @@ public class Map implements OnMapReadyCallback{
      */
     protected void buildMarkers(){
         int index = 0;
+        LatLngBounds.Builder b = new LatLngBounds.Builder();
         for(Halte halte: this.response.getResult()){
             if(halte.getLong() != 0 && halte.getLat() != 0){
+                LatLng position = new LatLng(halte.getLat(), halte.getLong());
                 this.map.addMarker(
                         new MarkerOptions()
-                                .position(new LatLng(halte.getLat(), halte.getLong()))
+                                .position(position)
                                 .title(Integer.toString(index++))
                                 .icon(BitmapDescriptorFactory.fromResource(R.mipmap.bus))
                 );
+
+                b.include(position);
             }
         }
+
+        LatLngBounds bounds = b.build();
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 20,20,5);
+        this.map.animateCamera(cameraUpdate);
     }
 
     protected void mapListener(){
