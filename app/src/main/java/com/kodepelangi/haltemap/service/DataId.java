@@ -52,6 +52,11 @@ public class DataId extends AsyncTask<URL, Integer, Response>{
         this.gson = new Gson();
     }
 
+    /**
+     *
+     * @param urls java.net.URL
+     * @return com.kodepelangi.haltemap.entity.Response
+     */
     @Override
     protected Response doInBackground(URL... urls) {
         HttpGet request = new HttpGet(urls[0].toString());
