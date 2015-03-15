@@ -6,7 +6,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.gms.maps.MapFragment;
+import com.kodepelangi.haltemap.entity.Response;
+import com.kodepelangi.haltemap.service.DataId;
 import com.kodepelangi.haltemap.service.Map;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -23,7 +29,27 @@ public class MainActivity extends ActionBarActivity {
 
         // Create map fragment
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(new Map());
+        mapFragment.getMapAsync(new Map(this, this.dataId()));
+    }
+
+    /**
+     *
+     * @return Response com.kodepelangi.haltemap.entity.Response
+     */
+    protected Response dataId(){
+        DataId dataId = new DataId();
+        Response response = new Response();
+        try {
+            dataId.execute(new URL("http://itsjakarta.com/map/its/halte"));
+            response = dataId.get();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        } catch (ExecutionException e){
+            e.printStackTrace();
+        }
+        return response;
     }
 
     /**
